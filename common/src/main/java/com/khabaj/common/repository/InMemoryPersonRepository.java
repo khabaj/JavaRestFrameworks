@@ -11,10 +11,12 @@ import java.util.stream.Stream;
 
 public class InMemoryPersonRepository {
 
+    private static final InMemoryPersonRepository inMemoryPersonRepository = new InMemoryPersonRepository();
+
     private final AtomicInteger idGenerator = new AtomicInteger(1);
     private final Map<Integer, Person> repository = new ConcurrentHashMap<>();
 
-    public InMemoryPersonRepository() {
+    private InMemoryPersonRepository() {
         initializeRepository();
     }
 
@@ -30,6 +32,10 @@ public class InMemoryPersonRepository {
                         .limit(30)
                         .collect(Collectors.toConcurrentMap(Person::getId, Function.identity())
                         ));
+    }
+
+    public static InMemoryPersonRepository getInstance() {
+        return inMemoryPersonRepository;
     }
 
     public Optional<Person> getById(Integer id) {

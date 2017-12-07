@@ -25,6 +25,6 @@ public class DropwizardApplication extends Application<DropwizardConfiguration> 
     @Override
     public void run(final DropwizardConfiguration configuration,
                     final Environment environment) {
-        environment.jersey().register(new PersonResource(new InMemoryPersonRepository()));
+        environment.jersey().register(new PersonResource(InMemoryPersonRepository.getInstance()));
     }
 }

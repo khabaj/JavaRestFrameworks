@@ -16,9 +16,8 @@ public class PersonController {
 
     InMemoryPersonRepository personRepository;
 
-    @Autowired
-    public PersonController(InMemoryPersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public PersonController() {
+        this.personRepository = InMemoryPersonRepository.getInstance();
     }
 
     @GetMapping
