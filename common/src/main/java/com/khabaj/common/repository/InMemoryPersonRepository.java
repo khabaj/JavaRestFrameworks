@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class InMemoryPersonRepository {
+public class InMemoryPersonRepository {
 
     private final AtomicInteger idGenerator = new AtomicInteger(1);
     private final Map<Integer, Person> repository = new ConcurrentHashMap<>();
