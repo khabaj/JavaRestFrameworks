@@ -29,7 +29,7 @@ public class InMemoryPersonRepository {
                             PhoneGenerator phoneGenerator = new PhoneGenerator();
                             return phoneGenerator.generatePhoneNumber();
                         }).limit(3).collect(Collectors.toSet())))
-                        .limit(30)
+                        .limit(3000)
                         .collect(Collectors.toConcurrentMap(Person::getId, Function.identity())
                         ));
     }

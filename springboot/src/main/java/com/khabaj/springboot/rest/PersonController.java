@@ -2,13 +2,19 @@ package com.khabaj.springboot.rest;
 
 import com.khabaj.common.domain.Person;
 import com.khabaj.common.repository.InMemoryPersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/persons")
@@ -21,23 +27,30 @@ public class PersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Person>> getPersons() {
-        return new ResponseEntity<>(personRepository.getAll(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Resource<Person>> getPersons() {
+        return personRepository.getAll().stream()
+                .map(this::toResource)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Person> getPerson(@PathVariable("id") Integer personId) {
-
+    public ResponseEntity<Resource<Person>> getPerson(@PathVariable("id") Integer personId) {
         Optional<Person> person = personRepository.getById(personId);
+
         return person
-                .map(p -> new ResponseEntity<>(person.get(), HttpStatus.OK))
+                .map(this::toResource)
+                .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
     public ResponseEntity addPerson(@RequestBody Person person) {
         personRepository.save(person);
-        return new ResponseEntity(HttpStatus.CREATED);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        Link link = linkTo(methodOn(PersonController.class).getPerson(person.getId())).withSelfRel();
+        responseHeaders.set(HttpHeaders.LOCATION, link.getHref());
+        return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
@@ -54,5 +67,11 @@ public class PersonController {
     public ResponseEntity deletePerson(@PathVariable("id") Integer personId) {
         personRepository.delete(personId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    private Resource<Person> toResource(Person person) {
+        Resource resource = new Resource(person);
+        resource.add(linkTo(methodOn(PersonController.class).getPerson(person.getId())).withSelfRel());
+        return resource;
     }
 }

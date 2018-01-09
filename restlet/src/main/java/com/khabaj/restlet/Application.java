@@ -9,7 +9,7 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         Component component = new Component();
-        component.getServers().add(Protocol.HTTP, 8088);
+        component.getServers().add(Protocol.HTTP, 8090);
 
         component.getDefaultHost().attach("/persons", PersonsResource.class);
         component.getDefaultHost().attach("/persons/{id}", PersonResource.class);

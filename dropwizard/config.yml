@@ -1,8 +1,6 @@
-logging:
-  level: INFO
-  loggers:
-    com.khabaj: DEBUG
 server:
   applicationConnectors:
     - type: http
-      port: 8082
+      port: 8090
+  requestLog:
+    appenders: []
