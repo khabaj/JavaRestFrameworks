@@ -9,7 +9,9 @@ import io.dropwizard.setup.Environment;
 public class DropwizardApplication extends Application<DropwizardConfiguration> {
 
     public static void main(final String[] args) throws Exception {
+        long time = System.currentTimeMillis();
         new DropwizardApplication().run(args);
+        System.out.println("Started in " + (System.currentTimeMillis() - time) + " ms");
     }
 
     @Override
