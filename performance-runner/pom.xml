@@ -8,6 +8,10 @@
     <artifactId>performance-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <resultsFolder></resultsFolder>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
@@ -24,6 +28,7 @@
                 <version>2.2.4</version>
                 <configuration>
                     <runMultipleSimulations>true</runMultipleSimulations>
+                    <resultsFolder>target/${resultsFolder}</resultsFolder>
                 </configuration>
             </plugin>
         </plugins>

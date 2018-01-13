@@ -1,5 +1,5 @@
 SET BASE_URL=http://localhost:8090
 
-start java -jar ../springboot/target/springboot-1.0-SNAPSHOT.jar
+start java -jar ../spark/target/spark-1.0-SNAPSHOT-jar-with-dependencies.jar
 timeout /t 5
-start .\mvnw gatling:execute -DresultsFolder=springboot_results
+start .\mvnw gatling:execute -DresultsFolder=spark_results

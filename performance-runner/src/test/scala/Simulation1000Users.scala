@@ -2,11 +2,9 @@ package com.khabaj.perfrunner
 
 import io.gatling.core.Predef._
 
-import scala.concurrent.duration._
-
-class Simulation10Users extends BaseSimulation {
+class Simulation1000Users extends BaseSimulation {
 
   setUp(
-    getAllPersons.inject(atOnceUsers(10))
+    getAllPersons.inject(atOnceUsers(1000))
   )
 }

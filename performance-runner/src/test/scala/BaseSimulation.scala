@@ -5,14 +5,13 @@ import io.gatling.http.Predef._
 
 import scala.concurrent.duration._
 
-class GetAllPersonsSimulation extends Simulation {
+abstract class BaseSimulation extends Simulation {
 
-  //val serviceUri = System.getenv("BASE_URL");
-  val serviceUri = "http://localhost:8090";
-  val httpConf = http.baseURL(serviceUri).warmUp(serviceUri)
+  val serviceURL = sys.env.get("BASE_URL")
+  val httpConf = http.baseURL(serviceURL.getOrElse("http://localhost:8090"))
 
-  val getAllPersons = scenario("Get All Persons")
-    .during(10 seconds) {
+  val getAllPersons = scenario("")
+    .forever() {
       exec(http("Get All Persons")
         .get("/persons")
         .header("Accept", "application/json")
@@ -20,14 +19,8 @@ class GetAllPersonsSimulation extends Simulation {
       )
     }
 
-
-  setUp(
-    getAllPersons.inject(atOnceUsers(5000)),
-
-    //getAllPersons123.inject(constantUsersPerSec(500) during (30 seconds)),
-
-
-  ).assertions(global.successfulRequests.percent.gte(90))
+  setUp()
+    .assertions(global.successfulRequests.percent.gte(90))
     .protocols(httpConf)
-    .maxDuration(5 minutes)
+    .maxDuration(5 seconds)
 }
